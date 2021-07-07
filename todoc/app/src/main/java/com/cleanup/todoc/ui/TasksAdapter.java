@@ -135,8 +135,8 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
                 @Override
                 public void onClick(View view) {
                     final Object tag = view.getTag();
-                    if (tag instanceof Task) {
-                        TaskViewHolder.this.deleteTaskListener.onDeleteTask((Task) tag);
+                    if (tag instanceof TaskProject) {
+                        TaskViewHolder.this.deleteTaskListener.onDeleteTask((Task) ((TaskProject) tag).task);
                     }
                 }
             });

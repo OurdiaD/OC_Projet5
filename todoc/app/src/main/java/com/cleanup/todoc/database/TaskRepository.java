@@ -39,4 +39,8 @@ public class TaskRepository {
     public void addTask(Task task){
         Executors.newSingleThreadExecutor().execute(() -> taskDao.insertOne(task));
     }
+
+    public void deleteTask(Task task){
+        Executors.newSingleThreadExecutor().execute(() -> taskDao.delete(task));
+    }
 }
