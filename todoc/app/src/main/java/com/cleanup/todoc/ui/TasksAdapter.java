@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cleanup.todoc.R;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.model.TaskProject;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      * The list of tasks the adapter deals with
      */
     @NonNull
-    private List<Task> tasks;
+    private List<TaskProject> tasks;
 
     /**
      * The listener for when a task needs to be deleted
@@ -39,7 +40,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      *
      * @param tasks the list of tasks the adapter deals with to set
      */
-    TasksAdapter(@NonNull final List<Task> tasks, @NonNull final DeleteTaskListener deleteTaskListener) {
+    TasksAdapter(@NonNull final List<TaskProject> tasks, @NonNull final DeleteTaskListener deleteTaskListener) {
         this.tasks = tasks;
         this.deleteTaskListener = deleteTaskListener;
     }
@@ -49,7 +50,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
      *
      * @param tasks the list of tasks the adapter deals with to set
      */
-    void updateTasks(@NonNull final List<Task> tasks) {
+    void updateTasks(@NonNull final List<TaskProject> tasks) {
         this.tasks = tasks;
         notifyDataSetChanged();
     }
@@ -146,11 +147,11 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TaskViewHold
          *
          * @param task the task to bind in the item view
          */
-        void bind(Task task) {
-            lblTaskName.setText(task.getName());
+        void bind(TaskProject task) {
+            lblTaskName.setText(task.task.getName());
             imgDelete.setTag(task);
 
-            final Project taskProject = task.getProject();
+            final Project taskProject = task.project;
             if (taskProject != null) {
                 imgProject.setSupportImageTintList(ColorStateList.valueOf(taskProject.getColor()));
                 lblProjectName.setText(taskProject.getName());

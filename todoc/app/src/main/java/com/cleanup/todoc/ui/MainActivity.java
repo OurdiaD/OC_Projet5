@@ -24,6 +24,7 @@ import com.cleanup.todoc.R;
 import com.cleanup.todoc.TodocViewModel;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.model.TaskProject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * List of all current tasks of the application
      */
     @NonNull
-    private final ArrayList<Task> tasks = new ArrayList<>();
+    private List<TaskProject> tasks = new ArrayList<>();
     //private ArrayList<Task> tasks;
 
     /**
@@ -95,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     @NonNull
     private TextView lblNoTasks;
 
+    TodocViewModel todocViewModel;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,12 +121,18 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     }
 
     public void init(){
-        TodocViewModel todocViewModel = new ViewModelProvider(this).get(TodocViewModel.class);
+        todocViewModel = new ViewModelProvider(this).get(TodocViewModel.class);
         todocViewModel.getAllProjects().observe(this, (Observer<List<Project>>) projects -> {
             allProjects = projects;
             populateDialogSpinner();
         });
-        //tasks = todocViewModel.getAllTasks();
+        todocViewModel.getAllTasks(sortMethod).observe(this, (Observer<List<TaskProject>>) tasks -> {
+            /*for (TaskProject t : tasks){
+                this.tasks.add(t.task);
+            }*/
+            this.tasks = tasks;
+            updateTasks();
+        });
     }
 
     @Override
@@ -145,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         } else if (id == R.id.filter_recent_first) {
             sortMethod = SortMethod.RECENT_FIRST;
         }
-
+        init();
         updateTasks();
 
         return super.onOptionsItemSelected(item);
@@ -225,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * @param task the task to be added to the list
      */
     private void addTask(@NonNull Task task) {
-        tasks.add(task);
+        todocViewModel.addTask(task);
         updateTasks();
     }
 
@@ -239,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         } else {
             lblNoTasks.setVisibility(View.GONE);
             listTasks.setVisibility(View.VISIBLE);
-            switch (sortMethod) {
+            /*switch (sortMethod) {
                 case ALPHABETICAL:
                     Collections.sort(tasks, new Task.TaskAZComparator());
                     break;
@@ -253,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
                     Collections.sort(tasks, new Task.TaskOldComparator());
                     break;
 
-            }
+            }*/
             adapter.updateTasks(tasks);
         }
     }
@@ -315,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
     /**
      * List of all possible sort methods for task
      */
-    private enum SortMethod {
+    public enum SortMethod {
         /**
          * Sort alphabetical by name
          */

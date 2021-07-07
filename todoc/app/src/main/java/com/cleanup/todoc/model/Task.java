@@ -6,7 +6,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
 import java.util.Comparator;
 
@@ -47,8 +49,6 @@ public class Task {
     @ColumnInfo(name = "timestamp")
     private long creationTimestamp;
 
-    @Embedded
-    public Project project;
 
     /**
      * Instantiates a new Task.
@@ -142,14 +142,6 @@ public class Task {
      */
     public void setCreationTimestamp(long creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
-    }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
     }
 
     /**

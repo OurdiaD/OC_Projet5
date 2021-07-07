@@ -23,32 +23,6 @@ public abstract class TodocDatabase extends RoomDatabase {
 
     private static TodocDatabase INSTANCE;
 
-    /*public synchronized static TodocDatabase getInstance(Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = buildDatabase(context);
-        }
-        return INSTANCE;
-    }
-
-    private static TodocDatabase buildDatabase(final Context context) {
-        return Room.databaseBuilder(context,
-                TodocDatabase.class,
-                "todoc_database")
-                .addCallback(new Callback() {
-                    @Override
-                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                        super.onCreate(db);
-                        Executors.newSingleThreadScheduledExecutor().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                getInstance(context).projectDao().insertAll(Project.populateData());
-                                getInstance(context).taskDao().insertAll(Task.populateData());
-                            }
-                        });
-                    }
-                })
-                .build();
-    }*/
     public static TodocDatabase getInstance(final Context context) {
         if (INSTANCE == null) {
             synchronized (TodocDatabase.class) {
@@ -65,7 +39,7 @@ public abstract class TodocDatabase extends RoomDatabase {
 
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
             Executors.newSingleThreadExecutor().execute(new Runnable() {
                 @Override
