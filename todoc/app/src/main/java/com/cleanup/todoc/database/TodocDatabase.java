@@ -28,7 +28,7 @@ public abstract class TodocDatabase extends RoomDatabase {
             synchronized (TodocDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            TodocDatabase.class, "song_database")
+                            TodocDatabase.class, "todoc_database")
                             .addCallback(sRoomDatabaseCallback)
                             .build();
                 }

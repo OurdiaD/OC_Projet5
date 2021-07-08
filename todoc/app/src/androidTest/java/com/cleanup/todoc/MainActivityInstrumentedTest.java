@@ -1,18 +1,32 @@
 package com.cleanup.todoc;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.cleanup.todoc.database.TodocDatabase;
+import com.cleanup.todoc.model.Project;
+import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.ui.MainActivity;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.os.SystemClock.sleep;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -33,6 +47,41 @@ import static org.junit.Assert.assertThat;
 public class MainActivityInstrumentedTest {
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
+
+    private TodocDatabase db;
+
+
+    @Before
+    public void createDb() {
+        Context context = ApplicationProvider.getApplicationContext();
+        /*InstrumentationRegistry.getTargetContext().deleteDatabase("todoc_database");
+
+        db = Room.inMemoryDatabaseBuilder(context, TodocDatabase.class).build();
+        sleep(1000);
+        db.projectDao().insertAll(Project.populateData());*/
+        /*db.clearAllTables();sleep(1000);
+
+        sleep(1000);*/
+        /*TodocDatabase dbori = TodocDatabase.getInstance(context);
+        dbori.close();*/
+        //db = Room.inMemoryDatabaseBuilder(context, TodocDatabase.class).build();
+        db = TodocDatabase.getInstance(context);
+        //db.projectDao().insertAll(Project.populateData());
+        db.taskDao().deleteAll();
+        /*db.clearAllTables();
+        db.projectDao().insertAll(Project.populateData());*/
+    }
+
+
+    @After
+    public void closeDb() {
+        /*db.clearAllTables();
+        db.projectDao().insertAll(Project.populateData());*/
+        db.taskDao().deleteAll();
+        db.taskDao().insertAll(Task.populateData());
+        //db.close();
+    }
+
 
     @Test
     public void addAndRemoveTask() {
