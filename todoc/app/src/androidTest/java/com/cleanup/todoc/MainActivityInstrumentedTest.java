@@ -54,29 +54,14 @@ public class MainActivityInstrumentedTest {
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
-        /*InstrumentationRegistry.getTargetContext().deleteDatabase("todoc_database");
-
-        db = Room.inMemoryDatabaseBuilder(context, TodocDatabase.class).build();
-        sleep(1000);
-        db.projectDao().insertAll(Project.populateData());*/
-        /*db.clearAllTables();sleep(1000);
-
-        sleep(1000);*/
-        /*TodocDatabase dbori = TodocDatabase.getInstance(context);
-        dbori.close();*/
         //db = Room.inMemoryDatabaseBuilder(context, TodocDatabase.class).build();
         db = TodocDatabase.getInstance(context);
-        //db.projectDao().insertAll(Project.populateData());
         db.taskDao().deleteAll();
-        /*db.clearAllTables();
-        db.projectDao().insertAll(Project.populateData());*/
     }
 
 
     @After
     public void closeDb() {
-        /*db.clearAllTables();
-        db.projectDao().insertAll(Project.populateData());*/
         db.taskDao().deleteAll();
         db.taskDao().insertAll(Task.populateData());
         //db.close();
