@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
+import androidx.sqlite.db.SimpleSQLiteQuery;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -75,5 +76,15 @@ public class TaskDaoTest {
         taskDao.deleteAll();
         List<TaskProject> tasks = LiveDataTestUtil.getValue(taskDao.getAll());
         assertTrue(tasks.isEmpty());
+    }
+    @Test
+    public void getOrder() throws InterruptedException {
+        taskDao.insertAll(Task.populateData());
+        SimpleSQLiteQuery query = new SimpleSQLiteQuery("SELECT * FROM Task ORDER BY name_task ASC");
+        List<TaskProject> tasks = LiveDataTestUtil.getValue(taskDao.getOrder(query));
+        assertEquals(3, tasks.size());
+        assertEquals("aaa", tasks.get(0).task.getName());
+        assertEquals("hhh", tasks.get(1).task.getName());
+        assertEquals("zzz", tasks.get(2).task.getName());
     }
 }
