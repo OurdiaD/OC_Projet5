@@ -46,7 +46,6 @@ public class MainActivityInstrumentedTest {
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
-        //db = Room.inMemoryDatabaseBuilder(context, TodocDatabase.class).build();
         db = TodocDatabase.getInstance(context);
         db.taskDao().deleteAll();
     }
@@ -56,7 +55,6 @@ public class MainActivityInstrumentedTest {
     public void closeDb() {
         db.taskDao().deleteAll();
         db.taskDao().insertAll(Task.populateData());
-        //db.close();
     }
 
 

@@ -1,4 +1,4 @@
-package com.cleanup.todoc;
+package com.cleanup.todoc.database;
 
 import android.app.Application;
 
@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.cleanup.todoc.database.TaskRepository;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 import com.cleanup.todoc.model.TaskProject;

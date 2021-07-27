@@ -37,16 +37,13 @@ public abstract class TodocDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+    private static final RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-            Executors.newSingleThreadExecutor().execute(new Runnable() {
-                @Override
-                public void run() {
-                    INSTANCE.projectDao().insertAll(Project.populateData());
-                    INSTANCE.taskDao().insertAll(Task.populateData());
-                }
+            Executors.newSingleThreadExecutor().execute(() -> {
+                INSTANCE.projectDao().insertAll(Project.populateData());
+                INSTANCE.taskDao().insertAll(Task.populateData());
             });
         }
     };

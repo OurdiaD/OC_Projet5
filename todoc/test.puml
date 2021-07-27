@@ -1,0 +1,141 @@
+@startuml
+abstract class com.cleanup.todoc.database.TodocDatabase {
+- {static} TodocDatabase INSTANCE
+- {static} RoomDatabase.Callback sRoomDatabaseCallback
++ {abstract}ProjectDao projectDao()
++ {abstract}TaskDao taskDao()
++ {static} TodocDatabase getInstance(Context)
+}
+class com.cleanup.todoc.TodocViewModel {
+~ TaskRepository taskRepository
++ LiveData<List<Project>> getAllProjects()
++ LiveData<List<TaskProject>> getAllTasks(MainActivity.SortMethod)
++ void addTask(Task)
++ void deleteTask(Task)
+}
+interface com.cleanup.todoc.database.daos.ProjectDao {
+~ LiveData<List<Project>> getAll()
+~ void insertAll(Project)
+~ void delete(Project)
+}
+interface com.cleanup.todoc.database.daos.TaskDao {
+~ LiveData<List<TaskProject>> getAll()
+~ LiveData<List<TaskProject>> getOrder(SupportSQLiteQuery)
+~ void insertOne(Task)
+~ void insertAll(Task)
+~ void delete(Task)
+~ void deleteAll()
+}
+class com.cleanup.todoc.model.Task {
+- long id
+- long projectId
+- String name
+- long creationTimestamp
++ long getId()
++ void setId(long)
++ void setProjectId(long)
++ long getProjectId()
++ long getCreationTimestamp()
++ String getName()
++ void setName(String)
++ void setCreationTimestamp(long)
++ {static} Task[] populateData()
+}
+class com.cleanup.todoc.model.Task.TaskAZComparator {
++ int compare(Task,Task)
+}
+class com.cleanup.todoc.model.Task.TaskZAComparator {
++ int compare(Task,Task)
+}
+class com.cleanup.todoc.model.Task.TaskRecentComparator {
++ int compare(Task,Task)
+}
+class com.cleanup.todoc.model.Task.TaskOldComparator {
++ int compare(Task,Task)
+}
+class com.cleanup.todoc.model.TaskProject {
++ Task task
++ Project project
+}
+class com.cleanup.todoc.ui.TasksAdapter {
+- List<TaskProject> tasks
+- DeleteTaskListener deleteTaskListener
+~ void updateTasks(List<TaskProject>)
++ TaskViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(TaskViewHolder,int)
++ int getItemCount()
+}
+interface com.cleanup.todoc.ui.TasksAdapter.DeleteTaskListener {
+~ void onDeleteTask(Task)
+}
+class com.cleanup.todoc.ui.TasksAdapter.TaskViewHolder {
+- AppCompatImageView imgProject
+- TextView lblTaskName
+- TextView lblProjectName
+- AppCompatImageView imgDelete
+- DeleteTaskListener deleteTaskListener
+~ void bind(TaskProject)
+}
+class com.cleanup.todoc.ui.MainActivity {
+- List<Project> allProjects
+- List<TaskProject> tasks
+- TasksAdapter adapter
+- SortMethod sortMethod
++ AlertDialog dialog
+- EditText dialogEditText
+- Spinner dialogSpinner
+- RecyclerView listTasks
+- TextView lblNoTasks
+~ TodocViewModel todocViewModel
++ void onCreate(Bundle)
++ void init()
++ boolean onCreateOptionsMenu(Menu)
++ boolean onOptionsItemSelected(MenuItem)
++ void onDeleteTask(Task)
+- void onPositiveButtonClick(DialogInterface)
+- void showAddTaskDialog()
+- void addTask(Task)
+- void updateTasks()
+- AlertDialog getAddTaskDialog()
+- void populateDialogSpinner()
+}
+class com.cleanup.todoc.database.TaskRepository {
+~ ProjectDao projectDao
+~ TaskDao taskDao
++ LiveData<List<Project>> getProjects()
++ LiveData<List<TaskProject>> getTasks(String,String)
++ void addTask(Task)
++ void deleteTask(Task)
+}
+class com.cleanup.todoc.model.Project {
+- long id
+- String name
+- int color
++ {static} Project[] populateData()
++ long getId()
++ String getName()
++ int getColor()
++ void setId(long)
++ void setName(String)
++ void setColor(int)
++ String toString()
+}
+
+
+androidx.room.RoomDatabase <|-- com.cleanup.todoc.database.TodocDatabase
+androidx.lifecycle.AndroidViewModel <|-- com.cleanup.todoc.TodocViewModel
+com.cleanup.todoc.model.Task +.. com.cleanup.todoc.model.Task.TaskAZComparator
+com.cleanup.todoc.model.Comparator <|.. com.cleanup.todoc.model.Task.TaskAZComparator
+com.cleanup.todoc.model.Task +.. com.cleanup.todoc.model.Task.TaskZAComparator
+com.cleanup.todoc.model.Comparator <|.. com.cleanup.todoc.model.Task.TaskZAComparator
+com.cleanup.todoc.model.Task +.. com.cleanup.todoc.model.Task.TaskRecentComparator
+com.cleanup.todoc.model.Comparator <|.. com.cleanup.todoc.model.Task.TaskRecentComparator
+com.cleanup.todoc.model.Task +.. com.cleanup.todoc.model.Task.TaskOldComparator
+com.cleanup.todoc.model.Comparator <|.. com.cleanup.todoc.model.Task.TaskOldComparator
+com.cleanup.todoc.ui.Adapter <|-- com.cleanup.todoc.ui.TasksAdapter
+com.cleanup.todoc.ui.TasksAdapter +.. com.cleanup.todoc.ui.TasksAdapter.DeleteTaskListener
+com.cleanup.todoc.ui.TasksAdapter +.. com.cleanup.todoc.ui.TasksAdapter.TaskViewHolder
+com.cleanup.todoc.ui.ViewHolder <|-- com.cleanup.todoc.ui.TasksAdapter.TaskViewHolder
+com.cleanup.todoc.ui.DeleteTaskListener <|.. com.cleanup.todoc.ui.MainActivity
+androidx.appcompat.app.AppCompatActivity <|-- com.cleanup.todoc.ui.MainActivity
+@enduml
