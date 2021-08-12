@@ -40,7 +40,6 @@ public abstract class TodocDatabase extends RoomDatabase {
     private static final RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
             Executors.newSingleThreadExecutor().execute(() -> {
                 INSTANCE.projectDao().insertAll(Project.populateData());
                 INSTANCE.taskDao().insertAll(Task.populateData());

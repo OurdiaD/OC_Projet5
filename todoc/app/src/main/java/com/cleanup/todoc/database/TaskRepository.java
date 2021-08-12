@@ -30,7 +30,6 @@ public class TaskRepository {
     }
 
     public LiveData<List<TaskProject>> getTasks(String column, String order){
-        //return taskDao.getAll();
         SimpleSQLiteQuery query = new SimpleSQLiteQuery(
                 "SELECT * FROM Task ORDER BY " + column + " " + order);
         return taskDao.getOrder(query);

@@ -17,6 +17,7 @@ public class TodocViewModel extends AndroidViewModel {
 
     TaskRepository taskRepository;
 
+
     public TodocViewModel(@NonNull Application application) {
         super(application);
         taskRepository = new TaskRepository(application);
@@ -26,7 +27,7 @@ public class TodocViewModel extends AndroidViewModel {
         return taskRepository.getProjects();
     }
 
-    public LiveData<List<TaskProject>> getAllTasks(MainActivity.SortMethod sortMethod){
+    public LiveData<List<TaskProject>> getAllTasks(SortMethod sortMethod){
         String column;
         String order;
         switch (sortMethod) {
@@ -58,5 +59,31 @@ public class TodocViewModel extends AndroidViewModel {
     }
     public void deleteTask(Task task){
         taskRepository.deleteTask(task);
+    }
+
+    /**
+     * List of all possible sort methods for task
+     */
+    public enum SortMethod {
+        /**
+         * Sort alphabetical by name
+         */
+        ALPHABETICAL,
+        /**
+         * Inverted sort alphabetical by name
+         */
+        ALPHABETICAL_INVERTED,
+        /**
+         * Lastly created first
+         */
+        RECENT_FIRST,
+        /**
+         * First created first
+         */
+        OLD_FIRST,
+        /**
+         * No sort
+         */
+        NONE
     }
 }
