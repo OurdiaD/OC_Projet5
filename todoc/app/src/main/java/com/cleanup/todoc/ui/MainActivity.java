@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * The sort method to be used to display tasks
      */
     @NonNull
-    private static SortMethod sortMethod = SortMethod.NONE;
+    private SortMethod sortMethod = SortMethod.NONE;
 
     /**
      * Dialog to create a new task
@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
             allProjects = projects;
             populateDialogSpinner();
         });
-        todocViewModel.getAllTasks(sortMethod).observe(this, tasks -> {
+        todocViewModel.getAllTasks().observe(this, tasks -> {
             this.tasks = tasks;
             updateTasks();
         });
@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         } else if (id == R.id.filter_recent_first) {
             sortMethod = SortMethod.RECENT_FIRST;
         }
+        todocViewModel.setSortMethod(sortMethod);
         init();
         updateTasks();
 

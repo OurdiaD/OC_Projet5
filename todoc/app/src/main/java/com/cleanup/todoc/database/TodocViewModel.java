@@ -16,18 +16,22 @@ import java.util.List;
 public class TodocViewModel extends AndroidViewModel {
 
     TaskRepository taskRepository;
-
+    SortMethod sortMethod = SortMethod.NONE;
 
     public TodocViewModel(@NonNull Application application) {
         super(application);
         taskRepository = new TaskRepository(application);
     }
 
+    public void setSortMethod(SortMethod sortMethod) {
+        this.sortMethod = sortMethod;
+    }
+
     public LiveData<List<Project>> getAllProjects(){
         return taskRepository.getProjects();
     }
 
-    public LiveData<List<TaskProject>> getAllTasks(SortMethod sortMethod){
+    public LiveData<List<TaskProject>> getAllTasks(){
         String column;
         String order;
         switch (sortMethod) {
